@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -13,74 +14,26 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Controller, useForm } from "react-hook-form";
 import { OutlinedInput } from "@mui/material";
-import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
-import steps from "../constants/jiraSteps";
-import { styled } from "@mui/system";
-import JiraStepsModal from "./JiraStepsModal";
+import steps from "../../constants/jiraSteps";
+import JiraStepsModal from "../JiraStepsModal";
+import Textarea from "./styles";
 
 export default function JiraForm() {
   const [activeStep, setActiveStep] = React.useState(0);
-  const { register, handleSubmit, watch, reset, control } = useForm();
+  const { register, handleSubmit, control, setValue, getValues, watch, reset } =
+    useForm({
+      defaultValues: { inputs: [""] }, // Initial input state with one empty input field
+    });
   const [data, setData] = React.useState({});
-  const [isFinished, setFinished] = React.useState(false);
-  const [jiraReplicationSteps, showJiraReplicationSteps] =
-    React.useState(false);
 
-  const blue = {
-    100: "#DAECFF",
-    200: "#b6daff",
-    400: "#3399FF",
-    500: "#007FFF",
-    600: "#0072E5",
-    900: "#003A75",
+  useEffect(() => {
+    watch("inputs"); // Force a re-render after updating the input state
+  }, [control]);
+
+  //Append inputs fields for replication steps
+  const appendInput = () => {
+    setValue("inputs", [...getValues("inputs"), ""]);
   };
-
-  const grey = {
-    50: "#F3F6F9",
-    100: "#E5EAF2",
-    200: "#DAE2ED",
-    300: "#C7D0DD",
-    400: "#B0B8C4",
-    500: "#9DA8B7",
-    600: "#6B7A90",
-    700: "#434D5B",
-    800: "#303740",
-    900: "#1C2025",
-  };
-
-  const Textarea = styled(BaseTextareaAutosize)(
-    ({ theme }) => `
-    width: 320px;
-    font-family: IBM Plex Sans, sans-serif;
-    font-size: 0.875rem;
-    font-weight: 400;
-    line-height: 1.5;
-    padding: 8px 12px;
-    border-radius: 8px;
-    color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
-    background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
-    border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
-    box-shadow: 0px 2px 2px ${
-      theme.palette.mode === "dark" ? grey[900] : grey[50]
-    };
-
-    &:hover {
-      border-color: ${blue[400]};
-    }
-
-    &:focus {
-      border-color: ${blue[400]};
-      box-shadow: 0 0 0 3px ${
-        theme.palette.mode === "dark" ? blue[600] : blue[200]
-      };
-    }
-
-    // firefox
-    &:focus-visible {
-      outline: 0;
-    }
-  `
-  );
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -91,12 +44,20 @@ export default function JiraForm() {
   };
 
   const handleReset = () => {
-    setActiveStep(0);
+    const response = confirm("Are you sure you want to do that?");
+
+    if (response) {
+      reset();
+      setActiveStep(0);
+      alert("Steps Cleared");
+    } else {
+      return;
+    }
   };
 
   const handleOnSubmit = (data) => {
     setData(data);
-    showJiraReplicationSteps(true);
+    console.log(data);
   };
 
   return (
@@ -117,14 +78,51 @@ export default function JiraForm() {
             >
               {step.label}
             </StepLabel>
+
             <StepContent>
+              {/* Regular Inpufields */}
               {step.isInput && (
-                <OutlinedInput
-                  size="small"
-                  name={step.id}
-                  {...register(step.id)}
-                />
+                <FormControl fullWidth sx={{ m: 1 }}>
+                  <OutlinedInput
+                    size="small"
+                    name={step.id}
+                    {...register(step.id)}
+                  />
+                </FormControl>
               )}
+
+              {/* Dynamic Input section */}
+              {step.allowMultipleInputFields && (
+                <>
+                  {getValues("inputs").map((_, index) => (
+                    <Controller
+                      key={index}
+                      name={`inputs[${index}]`}
+                      control={control}
+                      defaultValue=""
+                      render={({ field }) => (
+                        <FormControl fullWidth sx={{ m: 1 }} key={index}>
+                          <OutlinedInput
+                            label={`Input ${index + 1}`}
+                            size="small"
+                            {...field}
+                          />
+                        </FormControl>
+                      )}
+                    />
+                  ))}
+
+                  <Button
+                    variant="outlined"
+                    type="button"
+                    onClick={appendInput}
+                  >
+                    Add More
+                  </Button>
+                </>
+              )}
+
+              {/* Drop-down menu Items */}
               {step.isDropdownMenu && (
                 <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
                   <InputLabel id="demo-select-small-label">
@@ -137,9 +135,7 @@ export default function JiraForm() {
                     defaultValue=""
                     render={({ field }) => (
                       <Select label={step.label} {...field}>
-                        {/* <MenuItem value="None">
-                      <em>N/A</em>
-                    </MenuItem> */}
+                        <MenuItem value="None">N/A</MenuItem>
                         {step.dropDownItems.map((item, index) => (
                           <MenuItem value={item} key={index}>
                             {item}
@@ -151,6 +147,7 @@ export default function JiraForm() {
                 </FormControl>
               )}
 
+              {/* Text multiline input fields */}
               {step.isMultilineInput && (
                 <Textarea
                   aria-label="minimum height"
@@ -160,11 +157,12 @@ export default function JiraForm() {
                 />
               )}
 
-              {/* {isDescription && <Typography>{step.description}</Typography>} */}
+              {/* Finish and Continue buttons */}
               <Box sx={{ mb: 2 }}>
                 <div>
                   <Button
                     variant="contained"
+                    type="submit"
                     onClick={handleNext}
                     sx={{ mt: 1, mr: 1 }}
                   >
@@ -188,11 +186,11 @@ export default function JiraForm() {
         <Paper square elevation={0} sx={{ p: 3 }}>
           <Typography>All steps completed - you&apos;re finished</Typography>
           <JiraStepsModal steps={steps} jiraData={data} />
-          <Button
-            onClick={handleBack}
-            sx={{ mt: 1, mr: 1 }}
-          >
+          <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
             Back
+          </Button>
+          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+            Reset
           </Button>
         </Paper>
       )}

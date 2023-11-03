@@ -8,17 +8,12 @@ const steps = [
       id: "platform",
       label: "Platform",
       isDropdownMenu: true,
-      dropDownItems: ["ED", "ThinkCentral", "HRW"],
+      dropDownItems: ["ED", "ThinkCentral", "HRW", "HMHCO.COM"],
     },
     {
       id: "issue",
       label: "Issue",
       isMultilineInput: true
-    },
-    {
-      id: "replicationSteps",
-      label: "Replication Steps",
-      isInput: true
     },
     // {
     //   id: "numberAffected",
@@ -45,6 +40,11 @@ const steps = [
       id: "pid",
       label: "Organization PID",
       isInput: true,
+    },
+    {
+      id: "replicationSteps",
+      label: "Replication Steps",
+      allowMultipleInputFields: true
     },
     {
       id: "expected",

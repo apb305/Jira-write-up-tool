@@ -1,5 +1,4 @@
 import React from "react";
-import JiraForm from "../components/JiraForm";
 import {
   Container,
   Typography,
@@ -10,6 +9,7 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import Jiras from "../components/Jiras";
+import JiraForm from "../components/JiraForm/JiraForm";
 
 export default function Home() {
   return (

@@ -2,13 +2,15 @@ import * as React from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { toast } from "react-toastify";
+import { List, ListItem } from "@mui/material";
 
 export default function JiraStepsModal({ jiraData }) {
   const [open, setOpen] = React.useState(false);
+  const dialogContentRef = React.useRef(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -16,6 +18,22 @@ export default function JiraStepsModal({ jiraData }) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const copyToClipboard = () => {
+    const content = dialogContentRef.current;
+    if (content) {
+      const textToCopy = content.innerText;
+      navigator.clipboard
+        .writeText(textToCopy)
+        .then(() => {
+          toast.success("Text copied to clipboard");
+        })
+        .catch((error) => {
+          toast.error("Failed to copy text");
+          console.error("Failed to copy text: ", error);
+        });
+    }
   };
 
   return (
@@ -30,26 +48,23 @@ export default function JiraStepsModal({ jiraData }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"JIRA Replication Steps"}
-        </DialogTitle>
-        <DialogContent>
-          <br></br>
+        <DialogContent ref={dialogContentRef}>
+          <Typography variant="h5">
+            <strong>JIRA Replication Steps</strong>
+          </Typography>
+          {""}
           <Typography>
             <strong>Platform:</strong> {jiraData.platform}
           </Typography>
-          <br></br>
-          <br></br>
+          {""}
           <Typography>
             <strong>Organization Name:</strong> {jiraData.orgName}
           </Typography>
-          <br></br>
-          <br></br>
-          {/* <Typography>
-            <strong>Number of users affected:</strong> {jiraData.numberAffected}
+          {""}
+          <Typography>
+            <strong>Issue:</strong> {jiraData.issue}
           </Typography>
-          <br></br>
-          <br></br> */}
+          {""}
           <Typography>
             <strong>Username:</strong> {jiraData.username}
           </Typography>
@@ -59,19 +74,26 @@ export default function JiraStepsModal({ jiraData }) {
           <Typography>
             <strong>Organization PID:</strong> {jiraData.pid}
           </Typography>
-          <br></br>
-          <br></br>
+          {""}
+          <Typography>
+            <strong>Replication Steps:</strong>
+          </Typography>
+          <List>
+            {jiraData.inputs.map((item, index) => (
+              <ListItem key={index}>{index + 1}: {item}</ListItem>
+            ))}
+          </List>
+          {""}
           <Typography>
             <strong>Expected Result:</strong> {jiraData.expected}
           </Typography>
-          <br></br>
-          <br></br>
+          {""}
           <Typography>
             <strong>Actual Result:</strong> {jiraData.actual}
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Copy</Button>
+          <Button onClick={copyToClipboard}>Copy</Button>
           <Button onClick={handleClose} autoFocus>
             Close
           </Button>

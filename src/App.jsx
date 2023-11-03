@@ -3,6 +3,7 @@ import AppNav from "./components/Navbar";
 import Home from "./pages/Home";
 import Create from "./pages/Create";
 import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
           <Route path="/create" element={<Create />} />
         </Routes>
       </BrowserRouter>
-      <ToastContainer autoClose={1500} hideProgressBar={true} />
+      <ToastContainer autoClose={1500} hideProgressBar={true} position="top-center" />
     </>
   );
 }

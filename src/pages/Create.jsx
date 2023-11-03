@@ -1,5 +1,5 @@
 import React from "react";
-import JiraForm from "../components/JiraForm";
+import JiraForm from "../components/JiraForm/JiraForm";
 import { Typography, Divider, Container } from "@mui/material";
 
 export default function Create() {
