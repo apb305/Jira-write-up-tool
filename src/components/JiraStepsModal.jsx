@@ -39,7 +39,7 @@ export default function JiraStepsModal({ jiraData }) {
   return (
     <div>
       <Button variant="contained" onClick={handleClickOpen} sx={{ mt: 2 }}>
-        Save
+        View Steps
       </Button>
 
       <Dialog

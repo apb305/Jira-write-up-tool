@@ -13,10 +13,13 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Controller, useForm } from "react-hook-form";
-import { OutlinedInput } from "@mui/material";
+import { IconButton, Stack, TextField } from "@mui/material";
 import steps from "../../constants/jiraSteps";
 import JiraStepsModal from "../JiraStepsModal";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Textarea from "./styles";
+import ResetAlertDialog from "../ResetAlertDialog";
+import { toast } from "react-toastify";
 
 export default function JiraForm() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -28,11 +31,31 @@ export default function JiraForm() {
 
   useEffect(() => {
     watch("inputs"); // Force a re-render after updating the input state
+    const savedFormData = localStorage.getItem("jiraFormData");
+    if (savedFormData) {
+      const parsedData = JSON.parse(savedFormData);
+
+      // Set form data using setValue for each field
+      Object.keys(parsedData).forEach((fieldName) => {
+        setValue(fieldName, parsedData[fieldName]);
+      });
+
+      setData(parsedData);
+    }
+    // console.log(savedFormData);
   }, [control]);
 
   //Append inputs fields for replication steps
   const appendInput = () => {
     setValue("inputs", [...getValues("inputs"), ""]);
+  };
+
+  //Remove a field for the replication steps
+  const removeInput = (index) => {
+    console.log(getValues("inputs"));
+    const items = getValues("inputs");
+    items.pop();
+    setValue("inputs", [...items]);
   };
 
   const handleNext = () => {
@@ -43,19 +66,16 @@ export default function JiraForm() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
-    const response = confirm("Are you sure you want to do that?");
+  // const handleReset = () => {
+  //     reset();
+  //     setActiveStep(0);
+  //     localStorage.removeItem("jiraFormData");
+  //     toast.success("Steps Cleared");
+  // };
 
-    if (response) {
-      reset();
-      setActiveStep(0);
-      alert("Steps Cleared");
-    } else {
-      return;
-    }
-  };
-
-  const handleOnSubmit = (data) => {
+  const saveData = (data) => {
+    // Save form data to local storage
+    localStorage.setItem("jiraFormData", JSON.stringify(data));
     setData(data);
     console.log(data);
   };
@@ -64,7 +84,7 @@ export default function JiraForm() {
     <Box
       component="form"
       sx={{ maxWidth: 400 }}
-      onSubmit={handleSubmit(handleOnSubmit)}
+      onSubmit={handleSubmit(saveData)}
     >
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((step, index) => (
@@ -83,7 +103,7 @@ export default function JiraForm() {
               {/* Regular Inpufields */}
               {step.isInput && (
                 <FormControl fullWidth sx={{ m: 1 }}>
-                  <OutlinedInput
+                  <TextField
                     size="small"
                     name={step.id}
                     {...register(step.id)}
@@ -95,29 +115,50 @@ export default function JiraForm() {
               {step.allowMultipleInputFields && (
                 <>
                   {getValues("inputs").map((_, index) => (
-                    <Controller
-                      key={index}
-                      name={`inputs[${index}]`}
-                      control={control}
-                      defaultValue=""
-                      render={({ field }) => (
-                        <FormControl fullWidth sx={{ m: 1 }} key={index}>
-                          <OutlinedInput
-                            label={`Input ${index + 1}`}
-                            size="small"
-                            {...field}
-                          />
-                        </FormControl>
-                      )}
-                    />
+                    <div key={index}>
+                      <Stack direction="row">
+                        <Controller
+                          name={`inputs[${index}]`}
+                          control={control}
+                          defaultValue=""
+                          render={({ field }) => (
+                            <FormControl fullWidth sx={{ m: 1 }}>
+                              <TextField
+                                label={`Step ${index + 1}`}
+                                size="small"
+                                {...field}
+                              />
+                            </FormControl>
+                          )}
+                        />
+                        {/* <IconButton
+                          aria-label="delete"
+                          color="error"
+                          onClick={() => removeInput(index)}
+                        >
+                          <DeleteForeverIcon />
+                        </IconButton> */}
+                      </Stack>
+                    </div>
                   ))}
 
                   <Button
                     variant="outlined"
                     type="button"
+                    size="small"
+                    sx={{ marginY: 3 }}
                     onClick={appendInput}
                   >
-                    Add More
+                    Add
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    type="button"
+                    sx={{ marginLeft: 2 }}
+                    onClick={() => removeInput()}
+                  >
+                    Remove
                   </Button>
                 </>
               )}
@@ -166,7 +207,7 @@ export default function JiraForm() {
                     onClick={handleNext}
                     sx={{ mt: 1, mr: 1 }}
                   >
-                    {index === steps.length - 1 ? "Finish" : "Continue"}
+                    {index === steps.length - 1 ? "Finish" : "Save"}
                   </Button>
                   <Button
                     disabled={index === 0}
@@ -187,11 +228,9 @@ export default function JiraForm() {
           <Typography>All steps completed - you&apos;re finished</Typography>
           <JiraStepsModal steps={steps} jiraData={data} />
           <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-            Back
+            Edit
           </Button>
-          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-            Reset
-          </Button>
+          {/* <ResetAlertDialog handleReset={handleReset} /> */}
         </Paper>
       )}
     </Box>
