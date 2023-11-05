@@ -12,7 +12,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { IconButton, Stack, TextField } from "@mui/material";
 import steps from "../../constants/jiraSteps";
 import JiraStepsModal from "../JiraStepsModal";
@@ -27,36 +27,26 @@ export default function JiraForm() {
     useForm({
       defaultValues: { inputs: [""] }, // Initial input state with one empty input field
     });
-  const [data, setData] = React.useState({});
+
+  const { fields, remove, append } = useFieldArray({
+    control,
+    name: "inputs",
+  });
 
   useEffect(() => {
-    watch("inputs"); // Force a re-render after updating the input state
+    watch(); // Force a re-render after updating the input state
     const savedFormData = localStorage.getItem("jiraFormData");
+
     if (savedFormData) {
       const parsedData = JSON.parse(savedFormData);
-
       // Set form data using setValue for each field
       Object.keys(parsedData).forEach((fieldName) => {
         setValue(fieldName, parsedData[fieldName]);
       });
-
-      setData(parsedData);
     }
+
     // console.log(savedFormData);
-  }, [control]);
-
-  //Append inputs fields for replication steps
-  const appendInput = () => {
-    setValue("inputs", [...getValues("inputs"), ""]);
-  };
-
-  //Remove a field for the replication steps
-  const removeInput = (index) => {
-    console.log(getValues("inputs"));
-    const items = getValues("inputs");
-    items.pop();
-    setValue("inputs", [...items]);
-  };
+  }, [control, reset, append]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -66,18 +56,17 @@ export default function JiraForm() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  // const handleReset = () => {
-  //     reset();
-  //     setActiveStep(0);
-  //     localStorage.removeItem("jiraFormData");
-  //     toast.success("Steps Cleared");
-  // };
+  const handleReset = () => {
+    localStorage.removeItem("jiraFormData");
+    reset();
+    setActiveStep(0);
+    toast.success("Steps Cleared");
+  };
 
   const saveData = (data) => {
     // Save form data to local storage
     localStorage.setItem("jiraFormData", JSON.stringify(data));
-    setData(data);
-    console.log(data);
+    console.log(getValues());
   };
 
   return (
@@ -114,8 +103,8 @@ export default function JiraForm() {
               {/* Dynamic Input section */}
               {step.allowMultipleInputFields && (
                 <>
-                  {getValues("inputs").map((_, index) => (
-                    <div key={index}>
+                  {fields.map((field, index) => (
+                    <div key={field.id}>
                       <Stack direction="row">
                         <Controller
                           name={`inputs[${index}]`}
@@ -131,13 +120,13 @@ export default function JiraForm() {
                             </FormControl>
                           )}
                         />
-                        {/* <IconButton
+                        <IconButton
                           aria-label="delete"
                           color="error"
-                          onClick={() => removeInput(index)}
+                          onClick={() => remove(index)}
                         >
                           <DeleteForeverIcon />
-                        </IconButton> */}
+                        </IconButton>
                       </Stack>
                     </div>
                   ))}
@@ -147,18 +136,11 @@ export default function JiraForm() {
                     type="button"
                     size="small"
                     sx={{ marginY: 3 }}
-                    onClick={appendInput}
+                    onClick={() => {
+                      append([""]);
+                    }}
                   >
-                    Add
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    type="button"
-                    sx={{ marginLeft: 2 }}
-                    onClick={() => removeInput()}
-                  >
-                    Remove
+                    Add Step
                   </Button>
                 </>
               )}
@@ -169,7 +151,6 @@ export default function JiraForm() {
                   <InputLabel id="demo-select-small-label">
                     {step.label}
                   </InputLabel>
-
                   <Controller
                     control={control}
                     name={step.id}
@@ -226,11 +207,11 @@ export default function JiraForm() {
       {activeStep === steps.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
           <Typography>All steps completed - you&apos;re finished</Typography>
-          <JiraStepsModal steps={steps} jiraData={data} />
+          <JiraStepsModal steps={steps} jiraData={getValues()} />
           <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
             Edit
           </Button>
-          {/* <ResetAlertDialog handleReset={handleReset} /> */}
+          <ResetAlertDialog handleReset={handleReset} />
         </Paper>
       )}
     </Box>
