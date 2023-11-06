@@ -92,6 +92,10 @@ export default function JiraStepsModal({ jiraData }) {
           <Typography>
             <strong>Actual Result:</strong> {jiraData.actual}
           </Typography>
+          {""}
+          <Typography>
+            <strong>Additional Information:</strong> {jiraData.additionalInformation}
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={copyToClipboard}>Copy</Button>

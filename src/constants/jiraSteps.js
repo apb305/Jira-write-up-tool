@@ -76,6 +76,11 @@ const steps = [
       label: "Actual Result",
       isMultilineInput: true,
     },
+    {
+      id: "additionalNotes",
+      label: "Additional Information",
+      isMultilineInput: true,
+    },
   ];
 
   export default steps
