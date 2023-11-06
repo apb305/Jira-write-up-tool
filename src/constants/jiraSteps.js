@@ -77,7 +77,7 @@ const steps = [
       isMultilineInput: true,
     },
     {
-      id: "additionalNotes",
+      id: "additionalInformation",
       label: "Additional Information",
       isMultilineInput: true,
     },
