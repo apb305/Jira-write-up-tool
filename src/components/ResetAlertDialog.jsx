@@ -17,7 +17,7 @@ export default function ResetAlertDialog({ handleReset }) {
 
   return (
     <>
-      <Button onClick={handleClickOpen} sx={{ mt: 1, mr: 1 }}>
+      <Button onClick={handleClickOpen} sx={{ mt: 3 }}>
         Reset
       </Button>
       <Dialog

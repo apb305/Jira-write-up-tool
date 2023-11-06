@@ -208,7 +208,7 @@ export default function JiraForm() {
         <Paper square elevation={0} sx={{ p: 3 }}>
           <Typography>All steps completed - you&apos;re finished</Typography>
           <JiraStepsModal steps={steps} jiraData={getValues()} />
-          <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+          <Button onClick={handleBack} sx={{ mt: 3, mr: 2 }}>
             Edit
           </Button>
           <ResetAlertDialog handleReset={handleReset} />

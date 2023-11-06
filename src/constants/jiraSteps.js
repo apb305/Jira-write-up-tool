@@ -1,7 +1,27 @@
 const steps = [
+    // {
+    //   id: "caseNumber",
+    //   label: "Case Number",
+    //   isInput: true,
+    // },
     {
-      id: "caseNumber",
-      label: "Case Number",
+      id: "agentName",
+      label: "Agent Name",
+      isInput: true,
+    },
+    {
+      id: "agentEmail",
+      label: "Agent Email",
+      isInput: true,
+    },
+    {
+      id: "reporterName",
+      label: "Reporter's Name",
+      isInput: true,
+    },
+    {
+      id: "reporterEmail",
+      label: "Reporter's Email",
       isInput: true,
     },
     {

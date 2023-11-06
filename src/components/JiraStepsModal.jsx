@@ -48,6 +48,9 @@ export default function JiraStepsModal({ jiraData }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogContent ref={dialogContentRef}>
+        <Typography sx={{marginBottom: 2}}>
+            <strong>Original Reporter: {jiraData.agentName} {`(${jiraData.agentEmail})`} on behalf of {jiraData.reporterName} {`(${jiraData.reporterEmail})`} </strong>
+          </Typography>
           <Typography variant="h5" sx={{marginBottom: 2}}>
             <strong>JIRA Replication Steps</strong>
           </Typography>
@@ -64,7 +67,7 @@ export default function JiraStepsModal({ jiraData }) {
           </Typography>
           {""}
           <Typography>
-            <strong>Username Information:</strong>
+            <strong>Affected Username Information:</strong>
           </Typography>
           {""}
           <List>
