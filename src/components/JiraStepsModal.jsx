@@ -2,7 +2,6 @@ import * as React from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { toast } from "react-toastify";
@@ -49,10 +48,9 @@ export default function JiraStepsModal({ jiraData }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogContent ref={dialogContentRef}>
-          <Typography variant="h5">
+          <Typography variant="h5" sx={{marginBottom: 2}}>
             <strong>JIRA Replication Steps</strong>
           </Typography>
-          {""}
           <Typography>
             <strong>Platform:</strong> {jiraData.platform}
           </Typography>
@@ -66,14 +64,14 @@ export default function JiraStepsModal({ jiraData }) {
           </Typography>
           {""}
           <Typography>
-            <strong>Username:</strong> {jiraData.username}
+            <strong>Username Information:</strong>
           </Typography>
-          <Typography>
-            <strong>Role:</strong> {jiraData.role}
-          </Typography>
-          <Typography>
-            <strong>Organization PID:</strong> {jiraData.pid}
-          </Typography>
+          {""}
+          <List>
+           <ListItem>- Username: {jiraData.username}</ListItem>
+           <ListItem>- Role: {jiraData.role}</ListItem>
+           <ListItem>- PID: {jiraData.pid}</ListItem>
+          </List>
           {""}
           <Typography>
             <strong>Replication Steps:</strong>

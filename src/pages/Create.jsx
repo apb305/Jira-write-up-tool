@@ -5,7 +5,6 @@ import { Typography, Divider, Container } from "@mui/material";
 export default function Create() {
   return (
     <div>
-      <Container maxWidth="lg">
         <Typography
           variant="h5"
           textAlign={"center"}
@@ -16,7 +15,6 @@ export default function Create() {
         </Typography>
         <Divider sx={{ marginTop: 2 }} />
         <JiraForm />
-      </Container>
     </div>
   );
 }
