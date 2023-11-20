@@ -9,7 +9,8 @@ import { List, ListItem } from "@mui/material";
 
 export default function JiraStepsModal({ jiraData }) {
   const [open, setOpen] = React.useState(false);
-  const dialogContentRef = React.useRef(null);
+  const jiraRef = React.useRef(null);
+  const jiraReporterRef = React.useRef(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -19,8 +20,24 @@ export default function JiraStepsModal({ jiraData }) {
     setOpen(false);
   };
 
-  const copyToClipboard = () => {
-    const content = dialogContentRef.current;
+  const copyStepsClipboard = () => {
+    const content = jiraRef.current;
+    if (content) {
+      const textToCopy = content.innerText;
+      navigator.clipboard
+        .writeText(textToCopy)
+        .then(() => {
+          toast.success("Text copied to clipboard");
+        })
+        .catch((error) => {
+          toast.error("Failed to copy text");
+          console.error("Failed to copy text: ", error);
+        });
+    }
+  };
+
+  const copyReporterToClipboard = () => {
+    const content = jiraReporterRef.current;
     if (content) {
       const textToCopy = content.innerText;
       navigator.clipboard
@@ -47,11 +64,18 @@ export default function JiraStepsModal({ jiraData }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogContent ref={dialogContentRef}>
-        <Typography sx={{marginBottom: 2}}>
-            <strong>Original Reporter: {jiraData.agentName} {`(${jiraData.agentEmail})`} on behalf of {jiraData.reporterName} {`(${jiraData.reporterEmail})`} </strong>
+        <DialogContent ref={jiraRef}>
+          <Typography sx={{ marginBottom: 2 }}>
+            <strong ref={jiraReporterRef}>
+              {jiraData.agentName}{" "}
+              {`(${jiraData.agentEmail})`} on behalf of {jiraData.reporterName}{" "}
+              {`(${jiraData.reporterEmail})`}{" "}
+            </strong>
           </Typography>
-          <Typography variant="h5" sx={{marginBottom: 2}}>
+          <DialogActions>
+          <Button onClick={copyReporterToClipboard}>Copy Reporter Details</Button>
+        </DialogActions>
+          <Typography variant="h5" sx={{ marginBottom: 2 }}>
             <strong>JIRA Replication Steps</strong>
           </Typography>
           <Typography>
@@ -71,9 +95,9 @@ export default function JiraStepsModal({ jiraData }) {
           </Typography>
           {""}
           <List>
-           <ListItem>- Username: {jiraData.username}</ListItem>
-           <ListItem>- Role: {jiraData.role}</ListItem>
-           <ListItem>- PID: {jiraData.pid}</ListItem>
+            <ListItem>- Username: {jiraData.username}</ListItem>
+            <ListItem>- Role: {jiraData.role}</ListItem>
+            <ListItem>- PID: {jiraData.pid}</ListItem>
           </List>
           {""}
           <Typography>
@@ -81,7 +105,9 @@ export default function JiraStepsModal({ jiraData }) {
           </Typography>
           <List>
             {jiraData.inputs.map((item, index) => (
-              <ListItem key={index}>{index + 1}: {item}</ListItem>
+              <ListItem key={index}>
+                {index + 1}: {item}
+              </ListItem>
             ))}
           </List>
           {""}
@@ -93,12 +119,15 @@ export default function JiraStepsModal({ jiraData }) {
             <strong>Actual Result:</strong> {jiraData.actual}
           </Typography>
           {""}
-          <Typography>
-            <strong>Additional Information:</strong> {jiraData.additionalInformation}
-          </Typography>
+          {jiraData.additionalInformation ? (
+            <Typography>
+              <strong>Additional Information:</strong>{" "}
+              {jiraData.additionalInformation}
+            </Typography>
+          ) : null}
         </DialogContent>
         <DialogActions>
-          <Button onClick={copyToClipboard}>Copy</Button>
+          <Button onClick={copyStepsClipboard}>Copy Steps</Button>
           <Button onClick={handleClose} autoFocus>
             Close
           </Button>
