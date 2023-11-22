@@ -91,7 +91,7 @@ export default function JiraStepsModal({ jiraData }) {
           </Typography>
           {""}
           <Typography>
-            <strong>Affected User Information:</strong>
+            <strong>Affected Users:</strong>
           </Typography>
           {""}
           <List>
