@@ -27,7 +27,7 @@ export default function JiraStepsModal({ jiraData }) {
       navigator.clipboard
         .writeText(textToCopy)
         .then(() => {
-          toast.success("Text copied to clipboard");
+          toast.success("Replication steps copied to clipboard");
         })
         .catch((error) => {
           toast.error("Failed to copy text");
@@ -43,7 +43,7 @@ export default function JiraStepsModal({ jiraData }) {
       navigator.clipboard
         .writeText(textToCopy)
         .then(() => {
-          toast.success("Text copied to clipboard");
+          toast.success("Original reporter copied to clipboard");
         })
         .catch((error) => {
           toast.error("Failed to copy text");
@@ -65,67 +65,71 @@ export default function JiraStepsModal({ jiraData }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
+        <Typography variant="h5" sx={{ marginBottom: 2 }}>
+            <strong>Original Reporter:</strong>
+          </Typography>
           <Typography sx={{ marginBottom: 2 }}>
             <strong ref={jiraReporterRef}>
-              {jiraData.agentName}{" "}
-              {`(${jiraData.agentEmail})`} on behalf of {jiraData.reporterName}{" "}
-              {`(${jiraData.reporterEmail})`}{" "}
+              {jiraData.agentName} &#40;{jiraData.agentEmail}&#41; on behalf of{" "}
+              {jiraData.reporterName} &#40;{jiraData.reporterEmail}&#41;{" "}
             </strong>
           </Typography>
           <DialogActions>
-          <Button onClick={copyReporterToClipboard}>Copy Reporter Details</Button>
-        </DialogActions>
-        <div ref={jiraRef}>
+            <Button onClick={copyReporterToClipboard}>
+              Copy Reporter Details
+            </Button>
+          </DialogActions>
           <Typography variant="h5" sx={{ marginBottom: 2 }}>
-            <strong>JIRA Replication Steps</strong>
+            <strong>JIRA Replication Steps:</strong>
           </Typography>
-          <Typography>
-            <strong>Platform:</strong> {jiraData.platform}
-          </Typography>
-          {""}
-          <Typography>
-            <strong>Organization Name:</strong> {jiraData.orgName}
-          </Typography>
-          {""}
-          <Typography>
-            <strong>Issue:</strong> {jiraData.issue}
-          </Typography>
-          {""}
-          <Typography>
-            <strong>Affected Users:</strong>
-          </Typography>
-          {""}
-          <List>
-            <ListItem>- Username: {jiraData.username}</ListItem>
-            <ListItem>- Role: {jiraData.role}</ListItem>
-            <ListItem>- PID: {jiraData.pid}</ListItem>
-          </List>
-          {""}
-          <Typography>
-            <strong>Replication Steps:</strong>
-          </Typography>
-          <List>
-            {jiraData.inputs.map((item, index) => (
-              <ListItem key={index}>
-                {index + 1}: {item}
-              </ListItem>
-            ))}
-          </List>
-          {""}
-          <Typography>
-            <strong>Expected Result:</strong> {jiraData.expected}
-          </Typography>
-          {""}
-          <Typography>
-            <strong>Actual Result:</strong> {jiraData.actual}
-          </Typography>
-          {""}
-          {jiraData.additionalInformation ? (
+          <div ref={jiraRef}>
             <Typography>
-              <strong>Additional Information:</strong>{" "}
-              {jiraData.additionalInformation}
+              <strong>Platform:</strong> {jiraData.platform}
             </Typography>
-          ) : null}
+            {""}
+            <Typography>
+              <strong>School Name&#40;s&#41;:</strong> {jiraData.orgName}
+            </Typography>
+            {""}
+            <Typography>
+              <strong>Issue:</strong> {jiraData.issue}
+            </Typography>
+            {""}
+            <Typography>
+              <strong>Affected Users:</strong>
+            </Typography>
+            {""}
+            <List>
+              <ListItem>- Username: {jiraData.username}</ListItem>
+              <ListItem>- Role: {jiraData.role}</ListItem>
+              <ListItem>- PID: {jiraData.pid}</ListItem>
+            </List>
+            {""}
+            <Typography>
+              <strong>Replication Steps:</strong>
+            </Typography>
+            <List>
+              {jiraData.inputs.map((item, index) => (
+                <ListItem key={index}>
+                  {index + 1}: {item}
+                </ListItem>
+              ))}
+            </List>
+            {""}
+            <Typography>
+              <strong>Expected Result:</strong> {jiraData.expected}
+            </Typography>
+            {""}
+            <Typography>
+              <strong>Actual Result:</strong> {jiraData.actual}
+            </Typography>
+            {""}
+            {jiraData.additionalInformation ? (
+              <Typography>
+                <strong>Additional Information:</strong>{" "}
+                {jiraData.additionalInformation}
+              </Typography>
+            ) : null}
           </div>
         </DialogContent>
         <DialogActions>
