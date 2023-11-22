@@ -64,7 +64,7 @@ export default function JiraStepsModal({ jiraData }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogContent ref={jiraRef}>
+        <DialogContent>
           <Typography sx={{ marginBottom: 2 }}>
             <strong ref={jiraReporterRef}>
               {jiraData.agentName}{" "}
@@ -75,6 +75,7 @@ export default function JiraStepsModal({ jiraData }) {
           <DialogActions>
           <Button onClick={copyReporterToClipboard}>Copy Reporter Details</Button>
         </DialogActions>
+        <div ref={jiraRef}>
           <Typography variant="h5" sx={{ marginBottom: 2 }}>
             <strong>JIRA Replication Steps</strong>
           </Typography>
@@ -125,6 +126,7 @@ export default function JiraStepsModal({ jiraData }) {
               {jiraData.additionalInformation}
             </Typography>
           ) : null}
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={copyStepsClipboard}>Copy Steps</Button>
