@@ -20,17 +20,21 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Textarea from "./styles";
 import ResetAlertDialog from "../ResetAlertDialog";
 import { toast } from "react-toastify";
+import Schools from "./Schools";
+import Troubleshooting from "./Troubleshooting";
+import AffectedUsers from "./AffectedUsers";
+
 
 export default function JiraForm() {
   const [activeStep, setActiveStep] = React.useState(0);
   const { register, handleSubmit, control, setValue, getValues, watch, reset } =
     useForm({
-      defaultValues: { inputs: [""] }, // Initial input state with one empty input field
+      defaultValues: { stepsInputFields: [""], schoolsInputFields: [""], troubleshootingInputFields: [""], affectedUsersInputFields: [""] }, 
     });
 
   const { fields, remove, append } = useFieldArray({
     control,
-    name: "inputs",
+    name: "stepsInputFields",
   });
 
   useEffect(() => {
@@ -72,7 +76,7 @@ export default function JiraForm() {
   return (
     <Box
       component="form"
-      sx={{ maxWidth: 400 }}
+      sx={{ maxWidth: 400, marginBottom: 5 }}
       onSubmit={handleSubmit(saveData)}
     >
       <Stepper activeStep={activeStep} orientation="vertical">
@@ -100,16 +104,25 @@ export default function JiraForm() {
                 </FormControl>
               )}
 
-              {/* Dynamic Input section */}
-              {step.allowMultipleInputFields && (
+              {/* Schools */}
+              <Schools {...{control, step, register}} />
+
+              {/* Troubleshooting */}
+              <Troubleshooting {...{control, step, register}}/>
+
+              {/* Affected Users */}
+              <AffectedUsers {...{control, step, register}}/>
+
+              {/* Dynamic replication steps section */}
+              {step.isMultipleInputFieldsTwo && (
                 <>
                   {fields.map((field, index) => (
                     <div key={field.id}>
                       <Stack direction="row">
                         <Controller
-                          name={`inputs[${index}]`}
+                          name={`stepsInputFields[${index}]`}
                           control={control}
-                          defaultValue=""
+                          defaultValue={""}
                           render={({ field }) => (
                             <FormControl fullWidth sx={{ m: 1 }}>
                               <TextField
@@ -146,7 +159,7 @@ export default function JiraForm() {
               )}
 
               {/* Drop-down menu Items */}
-              {step.isDropdownMenu && (
+              {step.isPlatformDropdownMenu && (
                 <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
                   <InputLabel id="demo-select-small-label">
                     {step.label}

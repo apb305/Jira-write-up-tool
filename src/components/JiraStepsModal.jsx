@@ -65,7 +65,7 @@ export default function JiraStepsModal({ jiraData }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-        <Typography variant="h5" sx={{ marginBottom: 2 }}>
+          <Typography variant="h5" sx={{ marginBottom: 2 }}>
             <strong>Original Reporter:</strong>
           </Typography>
           <Typography sx={{ marginBottom: 2 }}>
@@ -88,8 +88,18 @@ export default function JiraStepsModal({ jiraData }) {
             </Typography>
             {""}
             <Typography>
-              <strong>School Name&#40;s&#41;:</strong> {jiraData.orgName}
+              <strong>School Name&#40;s&#41;:</strong>
             </Typography>
+            <List>
+              {jiraData.schoolsInputFields.map((item, index) => (
+                <ListItem key={index}>
+                  School: {item.school}
+                  <br></br>
+                  PID: {item.pid}
+                </ListItem>
+              ))}
+            </List>
+            {""}
             {""}
             <Typography>
               <strong>Issue:</strong> {jiraData.issue}
@@ -100,16 +110,32 @@ export default function JiraStepsModal({ jiraData }) {
             </Typography>
             {""}
             <List>
-              <ListItem>- Username: {jiraData.username}</ListItem>
-              <ListItem>- Role: {jiraData.role}</ListItem>
-              <ListItem>- PID: {jiraData.pid}</ListItem>
+              {jiraData.affectedUsersInputFields.map((item, index) => (
+                <ListItem key={index}>
+                  - Username: {item.username}
+                  <br></br>- Role: {item.role}
+                  <br></br>- PID: {item.pid}
+                  <br></br>
+                </ListItem>
+              ))}
             </List>
             {""}
+            <Typography>
+              <strong>Troubleshooting:</strong>
+            </Typography>
+            <List>
+              {jiraData.troubleshooting.map((item, index) => (
+                <ListItem key={index}>- {item}</ListItem>
+              ))}
+              {jiraData.troubleshootingInputFields.map((item, index) => (
+                <ListItem key={index}>- {item}</ListItem>
+              ))}
+            </List>
             <Typography>
               <strong>Replication Steps:</strong>
             </Typography>
             <List>
-              {jiraData.inputs.map((item, index) => (
+              {jiraData.stepsInputFields.map((item, index) => (
                 <ListItem key={index}>
                   {index + 1}: {item}
                 </ListItem>
@@ -124,10 +150,10 @@ export default function JiraStepsModal({ jiraData }) {
               <strong>Actual Result:</strong> {jiraData.actual}
             </Typography>
             {""}
-            {jiraData.additionalInformation ? (
+            {jiraData.additionalContext ? (
               <Typography>
-                <strong>Additional Information:</strong>{" "}
-                {jiraData.additionalInformation}
+                <strong>Additional Context:</strong>{" "}
+                {jiraData.additionalContext}
               </Typography>
             ) : null}
           </div>
