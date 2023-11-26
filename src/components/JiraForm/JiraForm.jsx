@@ -26,10 +26,10 @@ export default function JiraForm() {
   const { register, handleSubmit, control, setValue, getValues, watch, reset } =
     useForm({
       defaultValues: {
-        stepsInputFields: [""],
-        schoolsInputFields: [""],
-        troubleshootingInputFields: [""],
-        affectedUsersInputFields: [""],
+        stepsInputFields: [],
+        schoolsInputFields: [],
+        troubleshootingInputFields: [],
+        affectedUsersInputFields: [],
       },
     });
 
