@@ -16,7 +16,7 @@ export default function Troubleshooting({ control, step }) {
 
   return (
     <>
-      {step.isCheckboxes && (
+      {step.isTroubleShooting && (
         <>
           <Controller
             name={step.id}
@@ -25,7 +25,7 @@ export default function Troubleshooting({ control, step }) {
             render={({ field }) => (
               <FormControl fullWidth sx={{ m: 1 }}>
                 <FormGroup>
-                  {step.checkboxItems.map((item, index) => (
+                  {step.checkboxItems && step.checkboxItems.map((item, index) => (
                     <FormControlLabel
                       control={
                         <Checkbox

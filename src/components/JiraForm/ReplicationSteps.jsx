@@ -5,47 +5,28 @@ import { Controller, useFieldArray } from "react-hook-form";
 import { IconButton, Stack, TextField } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-export default function Schools({ control, step }) {
+export default function ReplicationSteps({ control, step }) {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "schoolsInputFields",
+    name: "stepsInputFields",
   });
-
   return (
     <>
-      {step.isSchoolsAffected && (
+      {step.isReplicationSteps && (
         <>
           {fields.map((field, index) => (
             <div key={field.id}>
               <Stack direction="row">
                 <Controller
-                  name={`schoolsInputFields[${index}]`}
+                  name={`stepsInputFields[${index}]`}
                   control={control}
-                  defaultValue={{ school: "", pid: "" }}
+                  defaultValue={""}
                   render={({ field }) => (
-                    <FormControl fullWidth sx={{mt: 2}}>
+                    <FormControl fullWidth sx={{ mt: 2 }}>
                       <TextField
-                        label={`School ${index + 1}`}
+                        label={`Step ${index + 1}`}
                         size="small"
-                        value={field.value.school || ""}
-                        onChange={(event) =>
-                          field.onChange({
-                            ...field.value,
-                            school: event.target.value,
-                          })
-                        }
-                      />
-                      <TextField
-                        sx={{ mt: 1 }}
-                        label={`PID`}
-                        size="small"
-                        value={field.value.pid || ""}
-                        onChange={(event) =>
-                          field.onChange({
-                            ...field.value,
-                            pid: event.target.value,
-                          })
-                        }
+                        {...field}
                       />
                     </FormControl>
                   )}
@@ -70,7 +51,7 @@ export default function Schools({ control, step }) {
               append([""]);
             }}
           >
-            Add School
+            Add Step
           </Button>
         </>
       )}

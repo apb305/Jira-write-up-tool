@@ -55,7 +55,7 @@ export default function JiraStepsModal({ jiraData }) {
   return (
     <div>
       <Button variant="contained" onClick={handleClickOpen} sx={{ mt: 2 }}>
-        View Steps
+        View
       </Button>
 
       <Dialog
@@ -86,40 +86,37 @@ export default function JiraStepsModal({ jiraData }) {
             <Typography>
               <strong>Platform:</strong> {jiraData.platform}
             </Typography>
-            {""}
-            <Typography>
-              <strong>School Name&#40;s&#41;:</strong>
-            </Typography>
-            <List>
-              {jiraData.schoolsInputFields.map((item, index) => (
-                <ListItem key={index}>
-                  School: {item.school}
-                  <br></br>
-                  PID: {item.pid}
-                </ListItem>
-              ))}
-            </List>
-            {""}
-            {""}
+            {jiraData.schoolsInputFields.length > 0 ? ( // If there are schools, display them
+              <>
+                <Typography>
+                  <strong>School Name&#40;s&#41;:</strong>
+                </Typography>
+                <List>
+                  {jiraData.schoolsInputFields.map((item, index) => (
+                    <ListItem key={index}>
+                      {item.school}
+                      <br></br>
+                      PID: {item.pid}
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            ) : null}
             <Typography>
               <strong>Issue:</strong> {jiraData.issue}
             </Typography>
-            {""}
             <Typography>
               <strong>Affected Users:</strong>
             </Typography>
-            {""}
             <List>
               {jiraData.affectedUsersInputFields.map((item, index) => (
                 <ListItem key={index}>
-                  - Username: {item.username}
-                  <br></br>- Role: {item.role}
-                  <br></br>- PID: {item.pid}
-                  <br></br>
+                  Username: {item.username}
+                  <br></br> Role: {item.role}
+                  <br></br> PID: {item.pid}
                 </ListItem>
               ))}
             </List>
-            {""}
             <Typography>
               <strong>Troubleshooting:</strong>
             </Typography>
@@ -141,15 +138,12 @@ export default function JiraStepsModal({ jiraData }) {
                 </ListItem>
               ))}
             </List>
-            {""}
             <Typography>
               <strong>Expected Result:</strong> {jiraData.expected}
             </Typography>
-            {""}
             <Typography>
               <strong>Actual Result:</strong> {jiraData.actual}
             </Typography>
-            {""}
             {jiraData.additionalContext ? (
               <Typography>
                 <strong>Additional Context:</strong>{" "}

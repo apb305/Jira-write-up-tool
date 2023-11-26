@@ -15,7 +15,7 @@ export default function AffectedUsers({ control, step }) {
 
   return (
     <>
-      {step.isAffectedUserDropdownMenu && (
+      {step.isAffectedUsers && (
         <>
           {fields.map((field, index) => (
             <div key={field.id}>
@@ -25,9 +25,9 @@ export default function AffectedUsers({ control, step }) {
                   control={control}
                   defaultValue={{ school: "", pid: "" }}
                   render={({ field }) => (
-                    <FormControl fullWidth sx={{ m: 1 }}>
+                    <FormControl fullWidth sx={{ mt: 2 }}> 
                       <TextField
-                        label="Username"
+                        label={`Username ${index + 1}`}
                         size="small"
                         value={field.value.username || ""}
                         onChange={(event) =>
@@ -37,9 +37,8 @@ export default function AffectedUsers({ control, step }) {
                           })
                         }
                       />
-
                       <FormControl fullWidth sx={{ mt: 2 }}>
-                        <InputLabel id="demo-select-small-label">
+                        <InputLabel>
                           Role
                         </InputLabel>
                         <Select

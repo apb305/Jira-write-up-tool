@@ -8,34 +8,30 @@ import StepContent from "@mui/material/StepContent";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { IconButton, Stack, TextField } from "@mui/material";
+import { useForm } from "react-hook-form";
 import steps from "../../constants/jiraSteps";
 import JiraStepsModal from "../JiraStepsModal";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import Textarea from "./styles";
 import ResetAlertDialog from "../ResetAlertDialog";
 import { toast } from "react-toastify";
 import Schools from "./Schools";
 import Troubleshooting from "./Troubleshooting";
 import AffectedUsers from "./AffectedUsers";
-
+import ReplicationSteps from "./ReplicationSteps";
+import PlatformDropdownMenu from "./PlatformDropdownMenu";
+import SingleInputFields from "./SingleInputFields";
+import MultilineInputFields from "./MultilineInputFields";
 
 export default function JiraForm() {
   const [activeStep, setActiveStep] = React.useState(0);
   const { register, handleSubmit, control, setValue, getValues, watch, reset } =
     useForm({
-      defaultValues: { stepsInputFields: [""], schoolsInputFields: [""], troubleshootingInputFields: [""], affectedUsersInputFields: [""] }, 
+      defaultValues: {
+        stepsInputFields: [""],
+        schoolsInputFields: [""],
+        troubleshootingInputFields: [""],
+        affectedUsersInputFields: [""],
+      },
     });
-
-  const { fields, remove, append } = useFieldArray({
-    control,
-    name: "stepsInputFields",
-  });
 
   useEffect(() => {
     watch(); // Force a re-render after updating the input state
@@ -50,7 +46,7 @@ export default function JiraForm() {
     }
 
     // console.log(savedFormData);
-  }, [control, reset, append]);
+  }, [control, reset]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -64,7 +60,7 @@ export default function JiraForm() {
     localStorage.removeItem("jiraFormData");
     reset();
     setActiveStep(0);
-    toast.success("Steps Cleared");
+    toast.success("All fields cleared");
   };
 
   const saveData = (data) => {
@@ -94,103 +90,19 @@ export default function JiraForm() {
 
             <StepContent>
               {/* Regular Inpufields */}
-              {step.isInput && (
-                <FormControl fullWidth sx={{ m: 1 }}>
-                  <TextField
-                    size="small"
-                    name={step.id}
-                    {...register(step.id)}
-                  />
-                </FormControl>
-              )}
+              <SingleInputFields {...{ step, register }} />
 
-              {/* Schools */}
-              <Schools {...{control, step, register}} />
+              {/* Dynamic Input fields */}
+              <Troubleshooting {...{ control, step, register }} />
+              <AffectedUsers {...{ control, step, register }} />
+              <Schools {...{ control, step, register }} />
+              <ReplicationSteps {...{ control, step, register }} />
 
-              {/* Troubleshooting */}
-              <Troubleshooting {...{control, step, register}}/>
+              {/* Platform drop-down menu */}
+              <PlatformDropdownMenu {...{ control, step }} />
 
-              {/* Affected Users */}
-              <AffectedUsers {...{control, step, register}}/>
-
-              {/* Dynamic replication steps section */}
-              {step.isMultipleInputFieldsTwo && (
-                <>
-                  {fields.map((field, index) => (
-                    <div key={field.id}>
-                      <Stack direction="row">
-                        <Controller
-                          name={`stepsInputFields[${index}]`}
-                          control={control}
-                          defaultValue={""}
-                          render={({ field }) => (
-                            <FormControl fullWidth sx={{ m: 1 }}>
-                              <TextField
-                                label={`Step ${index + 1}`}
-                                size="small"
-                                {...field}
-                              />
-                            </FormControl>
-                          )}
-                        />
-                        <IconButton
-                          aria-label="delete"
-                          color="error"
-                          onClick={() => remove(index)}
-                        >
-                          <DeleteForeverIcon />
-                        </IconButton>
-                      </Stack>
-                    </div>
-                  ))}
-
-                  <Button
-                    variant="outlined"
-                    type="button"
-                    size="small"
-                    sx={{ marginY: 3 }}
-                    onClick={() => {
-                      append([""]);
-                    }}
-                  >
-                    Add Step
-                  </Button>
-                </>
-              )}
-
-              {/* Drop-down menu Items */}
-              {step.isPlatformDropdownMenu && (
-                <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
-                  <InputLabel id="demo-select-small-label">
-                    {step.label}
-                  </InputLabel>
-                  <Controller
-                    control={control}
-                    name={step.id}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <Select label={step.label} {...field}>
-                        <MenuItem value="None">N/A</MenuItem>
-                        {step.dropDownItems.map((item, index) => (
-                          <MenuItem value={item} key={index}>
-                            {item}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              )}
-
-              {/* Text multiline input fields */}
-              {step.isMultilineInput && (
-                <Textarea
-                  aria-label="minimum height"
-                  minRows={3}
-                  name={step.id}
-                  {...register(step.id)}
-                />
-              )}
+              {/* Multiline input fields */}
+              <MultilineInputFields {...{ step, register }} />
 
               {/* Finish and Continue buttons */}
               <Box sx={{ mb: 2 }}>
@@ -201,7 +113,7 @@ export default function JiraForm() {
                     onClick={handleNext}
                     sx={{ mt: 1, mr: 1 }}
                   >
-                    {index === steps.length - 1 ? "Finish" : "Save"}
+                    {index === steps.length - 1 ? "Finish" : "Continue"}
                   </Button>
                   <Button
                     disabled={index === 0}

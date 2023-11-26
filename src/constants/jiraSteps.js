@@ -1,9 +1,4 @@
 const steps = [
-  // {
-  //   id: "caseNumber",
-  //   label: "Case Number",
-  //   isInput: true,
-  // },
   {
     id: "agentName",
     label: "Agent Name",
@@ -38,7 +33,7 @@ const steps = [
   {
     id: "troubleshooting",
     label: "Troubleshooting",
-    isCheckboxes: true,
+    isTroubleShooting: true,
     checkboxItems: [
       "Cleared cache and cookies",
       "Tried Incognito",
@@ -49,23 +44,18 @@ const steps = [
   {
     id: "affectedUsers",
     label: "Affected Users",
-    isAffectedUserDropdownMenu: true,
+    isAffectedUsers: true,
     dropDownItems: ["Administrator", "Teacher", "Student"],
   },
   {
     id: "schoolNames",
-    label: `School Name(s)`,
-    isMultipleInputFieldsOne: true,
+    label: "School Name(s) (If the issue only pertains to specific school sites and not the entire district)",
+    isSchoolsAffected: true,
   },
-  // {
-  //   id: "pid",
-  //   label: "Organization PID",
-  //   isInput: true,
-  // },
   {
     id: "replicationSteps",
     label: "Replication Steps",
-    isMultipleInputFieldsTwo: true,
+    isReplicationSteps: true,
   },
   {
     id: "expected",
