@@ -117,17 +117,21 @@ export default function JiraStepsModal({ jiraData }) {
                 </ListItem>
               ))}
             </List>
-            <Typography>
-              <strong>Troubleshooting:</strong>
-            </Typography>
-            <List>
-              {jiraData.troubleshooting.map((item, index) => (
-                <ListItem key={index}>- {item}</ListItem>
-              ))}
-              {jiraData.troubleshootingInputFields.map((item, index) => (
-                <ListItem key={index}>- {item}</ListItem>
-              ))}
-            </List>
+            {jiraData.troubleshooting.length > 0 ? ( // If there are troubleshooting steps, display them
+              <>
+                <Typography>
+                  <strong>Troubleshooting:</strong>
+                </Typography>
+                <List>
+                  {jiraData.troubleshooting.map((item, index) => (
+                    <ListItem key={index}>- {item}</ListItem>
+                  ))}
+                  {jiraData.troubleshootingInputFields.map((item, index) => (
+                    <ListItem key={index}>- {item}</ListItem>
+                  ))}
+                </List>
+              </>
+            ) : null}
             <Typography>
               <strong>Replication Steps:</strong>
             </Typography>
