@@ -9,7 +9,7 @@ export default function PlatformDropdownMenu({ control, step }) {
   return (
     <>
       {step.isPlatformDropdownMenu && (
-        <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
+        <FormControl sx={{ mt: 1, minWidth: 180 }} size="small">
           <InputLabel id="demo-select-small-label">{step.label}</InputLabel>
           <Controller
             control={control}

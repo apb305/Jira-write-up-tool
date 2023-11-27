@@ -13,7 +13,7 @@ import steps from "../../constants/jiraSteps";
 import JiraStepsModal from "../JiraStepsModal";
 import ResetAlertDialog from "../ResetAlertDialog";
 import { toast } from "react-toastify";
-import Schools from "./Schools";
+import AffectedSchools from "./AffectedSchools";
 import Troubleshooting from "./Troubleshooting";
 import AffectedUsers from "./AffectedUsers";
 import ReplicationSteps from "./ReplicationSteps";
@@ -95,7 +95,7 @@ export default function JiraForm() {
               {/* Dynamic Input fields */}
               <Troubleshooting {...{ control, step, register }} />
               <AffectedUsers {...{ control, step, register }} />
-              <Schools {...{ control, step, register }} />
+              <AffectedSchools {...{ control, step, register }} />
               <ReplicationSteps {...{ control, step, register }} />
 
               {/* Platform drop-down menu */}

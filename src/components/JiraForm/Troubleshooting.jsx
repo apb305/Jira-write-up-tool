@@ -23,7 +23,7 @@ export default function Troubleshooting({ control, step }) {
             control={control}
             defaultValue={[]}
             render={({ field }) => (
-              <FormControl fullWidth sx={{ m: 1 }}>
+              <FormControl fullWidth sx={{ mt: 1 }}>
                 <FormGroup>
                   {step.checkboxItems && step.checkboxItems.map((item, index) => (
                     <FormControlLabel
@@ -55,7 +55,7 @@ export default function Troubleshooting({ control, step }) {
                   control={control}
                   defaultValue={""}
                   render={({ field }) => (
-                    <FormControl fullWidth sx={{ m: 1 }}>
+                    <FormControl fullWidth sx={{ mt: 1 }}>
                       <TextField
                         placeholder="Troubleshooting"
                         size="small"

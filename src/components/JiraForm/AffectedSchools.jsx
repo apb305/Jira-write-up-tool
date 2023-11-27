@@ -5,7 +5,7 @@ import { Controller, useFieldArray } from "react-hook-form";
 import { IconButton, Stack, TextField } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-export default function Schools({ control, step }) {
+export default function AffectedSchools({ control, step }) {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "schoolsInputFields",
