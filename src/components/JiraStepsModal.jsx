@@ -117,7 +117,8 @@ export default function JiraStepsModal({ jiraData }) {
                 </ListItem>
               ))}
             </List>
-            {jiraData.troubleshooting.length > 0 ? ( // If there are troubleshooting steps, display them
+            {jiraData.troubleshooting.length > 0 ||
+            jiraData.troubleshootingInputFields.length > 0 ? ( // If there are troubleshooting steps, display them
               <>
                 <Typography>
                   <strong>Troubleshooting:</strong>
