@@ -23,7 +23,7 @@ const steps = [
     id: "platform",
     label: "Platform",
     isPlatformDropdownMenu: true,
-    dropDownItems: ["ED", "ThinkCentral", "HRW", "HMHCO.COM"],
+    dropDownItems: ["ED", "ThinkCentral", "HRW", "HMHCO.COM", "Waggle", "Writable", "Amira", "Read 180", "Math 180"],
   },
   {
     id: "issue",
